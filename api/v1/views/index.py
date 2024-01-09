@@ -1,30 +1,38 @@
 #!/usr/bin/python3
-"""index import"""
+
+""" blueprint indx
+"""
+
 from api.v1.views import app_views
-from flask import jsonify
 from models import storage
-from models.user import User
-from models.place import Place
 from models.state import State
 from models.city import City
 from models.amenity import Amenity
+from models.place import Place
 from models.review import Review
-
-classes = {"users": "User", "places": "Place", "states": "State",
-           "cities": "City", "amenities": "Amenity",
-           "reviews": "Review"}
+from models.user import User
 
 
-@app_views.route('/status', methods=['GET'])
+@app_views.route("/status", strict_slashes=False, methods=["GET"])
 def status():
-    '''  status page route '''
-    return jsonify({'status': 'OK'})
+    return {
+        "status": "OK",
+    }
 
 
-@app_views.route('/stats', methods=['GET'])
-def count():
-    ''' numb of each objects by type'''
-    count_dict = {}
-    for cls in classes:
-        count_dict[cls] = storage.count(classes[cls])
-    return jsonify(count_dict)
+@app_views.route("/stats", strict_slashes=False, methods=["GET"])
+def stats():
+    amenities = storage.count(Amenity)
+    cities = storage.count(City)
+    places = storage.count(Place)
+    reviews = storage.count(Review)
+    states = storage.count(State)
+    users = storage.count(User)
+    return {
+        "amenities": amenities,
+        "cities": cities,
+        "reviews": reviews,
+        "users": users,
+        "states": states,
+        "places": places,
+    }

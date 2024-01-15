@@ -35,4 +35,4 @@ def stats():
         "users": users,
         "states": states,
         "places": places,
-    }
+  }
